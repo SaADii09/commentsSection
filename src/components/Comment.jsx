@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect, lazy, Suspense } from "react";
-import { InputBox } from "../components";
+import { useState, useRef, useEffect, lazy, Suspense } from "react";
+import InputBox from "./InputBox";
 
 const EmojiPicker = lazy(() => import("emoji-picker-react"));
 
