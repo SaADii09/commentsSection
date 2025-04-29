@@ -1,5 +1,4 @@
-// import InputBox from "./InputBox.jsx";
+import InputBox from "./InputBox.jsx";
+import Comment from "./Comment.jsx";
 
-// import Comment from "./Comment.jsx";
-
-// export { InputBox, Comment };
+export { InputBox, Comment };

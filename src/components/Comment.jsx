@@ -1,8 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import InputBox from "./InputBox.jsx";
 
-const Comment = ({ comment, addReply }) => {
+const Comment = ({ comment, addReply, onEdit, onDelete }) => {
     const [showReplyBox, setShowReplyBox] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editText, setEditText] = useState(comment.text);
+    const editInputRef = useRef(null);
+
+    useEffect(() => {
+        if (isEditing && editInputRef.current) {
+            editInputRef.current.focus();
+        }
+    }, [isEditing]);
 
     const handleReplyClick = () => {
         setShowReplyBox(!showReplyBox);
@@ -13,27 +22,97 @@ const Comment = ({ comment, addReply }) => {
         setShowReplyBox(false);
     };
 
+    const handleEdit = () => {
+        setIsEditing(true);
+        // Use setTimeout to ensure the input is rendered before focusing
+        setTimeout(() => {
+            if (editInputRef.current) {
+                editInputRef.current.focus();
+                // Select all text for easier editing
+                editInputRef.current.select();
+            }
+        }, 0);
+    };
+
+    const handleEditSubmit = (e) => {
+        e.preventDefault();
+        if (editText.trim()) {
+            onEdit(comment.id, editText);
+            setIsEditing(false);
+        }
+    };
+
+    const handleDelete = () => {
+        onDelete(comment.id);
+    };
+
     return (
-        <div className="flex flex-col space-y-3 p-4 rounded-lg bg-white shadow-sm border border-gray-200 mb-4">
-            <p className="text-gray-800 text-sm">{comment.text}</p>
-            <button
-                onClick={handleReplyClick}
-                className="self-start px-4 py-1 text-sm text-blue-600 hover:text-blue-700 font-medium rounded-full bg-blue-50 hover:bg-blue-100 transition-colors duration-200"
-            >
-                Reply
-            </button>
+        <div className="flex flex-col space-y-3 p-4 rounded-xl bg-gradient-glass border border-dark-400 mb-4 shadow-glass hover:shadow-lg transition-all duration-300">
+            {isEditing ? (
+                <form onSubmit={handleEditSubmit} className="flex gap-2">
+                    <input
+                        ref={editInputRef}
+                        type="text"
+                        value={editText}
+                        onChange={(e) => setEditText(e.target.value)}
+                        className="flex-1 px-4 py-2 rounded-lg bg-dark-300 text-white border border-dark-400 focus:outline-none focus:border-accent-primary focus:ring-1 focus:ring-accent-primary/50 text-sm"
+                    />
+                    <button
+                        type="submit"
+                        className="px-4 py-2 bg-accent-primary text-white rounded-lg text-sm font-medium hover:bg-opacity-90 transition-all duration-200"
+                    >
+                        Save
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setIsEditing(false)}
+                        className="px-4 py-2 bg-dark-400 text-white rounded-lg text-sm font-medium hover:bg-opacity-90 transition-all duration-200"
+                    >
+                        Cancel
+                    </button>
+                </form>
+            ) : (
+                <>
+                    <p className="text-white text-sm font-medium">
+                        {comment.text}
+                    </p>
+                    <div className="flex gap-2">
+                        <button
+                            onClick={handleReplyClick}
+                            className="self-start px-4 py-1.5 text-sm font-medium rounded-lg bg-accent-primary text-white hover:bg-opacity-90 transition-all duration-200 shadow-md hover:shadow-lg"
+                        >
+                            Reply
+                        </button>
+                        <button
+                            onClick={handleEdit}
+                            className="self-start px-4 py-1.5 text-sm font-medium rounded-lg bg-accent-primary text-white hover:bg-opacity-90 transition-all duration-200 shadow-md hover:shadow-lg"
+                        >
+                            Edit
+                        </button>
+                        <button
+                            onClick={handleDelete}
+                            className="self-start px-4 py-1.5 text-sm font-medium rounded-lg bg-accent-danger text-white hover:bg-opacity-90 transition-all duration-200 shadow-md hover:shadow-lg"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </>
+            )}
+
             {showReplyBox && (
-                <div className="ml-4 mt-2">
+                <div className="ml-4 mt-2 bg-dark-300 bg-opacity-50 p-4 rounded-lg">
                     <InputBox onSubmit={handleAddReply} />
                 </div>
             )}
             {comment.replies && (
-                <div className="ml-8 space-y-4 border-l-2 border-gray-100 pl-4">
+                <div className="ml-8 space-y-4 border-l-2 border-dark-400 pl-4">
                     {comment.replies.map((reply) => (
                         <Comment
                             key={reply.id}
                             comment={reply}
                             addReply={addReply}
+                            onEdit={onEdit}
+                            onDelete={onDelete}
                         />
                     ))}
                 </div>
