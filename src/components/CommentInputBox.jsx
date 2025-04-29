@@ -2,7 +2,7 @@ import { useState, lazy, Suspense } from "react";
 
 const EmojiPicker = lazy(() => import("emoji-picker-react"));
 
-const InputBox = ({ onSubmit }) => {
+const CommentInputBox = ({ onSubmit }) => {
     const [text, setText] = useState("");
     const [showEmojiPicker, setShowEmojiPicker] = useState(false);
 
@@ -72,4 +72,4 @@ const InputBox = ({ onSubmit }) => {
     );
 };
 
-export default InputBox;
+export default CommentInputBox;

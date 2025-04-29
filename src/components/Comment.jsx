@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, lazy, Suspense } from "react";
-import InputBox from "./InputBox";
+import CommentInputBox from "./CommentInputBox";
 
 const EmojiPicker = lazy(() => import("emoji-picker-react"));
 
@@ -146,7 +146,7 @@ const Comment = ({ comment, addReply, onEdit, onDelete }) => {
 
             {showReplyBox && (
                 <div className="ml-4 mt-2 bg-dark-300 bg-opacity-50 p-4 rounded-lg">
-                    <InputBox onSubmit={handleAddReply} />
+                    <CommentInputBox onSubmit={handleAddReply} />
                 </div>
             )}
             {comment.replies && (

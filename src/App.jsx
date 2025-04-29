@@ -1,5 +1,5 @@
 import { useState } from "react";
-import InputBox from "./components/InputBox";
+import CommentInputBox from "./components/CommentInputBox";
 import Comment from "./components/Comment";
 import { initialComments } from "./data/commentData";
 
@@ -81,7 +81,7 @@ const App = () => {
                         <h2 className="text-lg font-semibold text-white mb-4">
                             Add a comment
                         </h2>
-                        <InputBox onSubmit={addComment} />
+                        <CommentInputBox onSubmit={addComment} />
                     </div>
                 </div>
             </div>
