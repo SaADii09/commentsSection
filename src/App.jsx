@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import Comment from "./components/Comment.jsx";
-import InputBox from "./components/InputBox.jsx";
+import { InputBox, Comment } from "./components";
 import { initialComments } from "./data/commentData.js";
 
 const App = () => {
